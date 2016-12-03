@@ -4,6 +4,7 @@ import z.house.coder.datastructures.Queue;
 import z.house.coder.datastructures.Stack;
 import z.house.coder.datastructures.algorithm.ArrayQueue;
 import z.house.coder.datastructures.algorithm.ArrayStack;
+import z.house.coder.datastructures.algorithm.LinkedList;
 import z.house.coder.datastructures.data.Node;
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -58,14 +59,23 @@ public class DataStructuresTest
     	assertEquals("d", s);
     }
 
-    /**
-     * Rigourous Test :-)
-     */
     public void testNode()
     {
     	Node<String> node = new Node<>("Test");  	
         assertTrue("Test".equals(node.getElement()));
-        node.setNode(new Node("Test2"));
+        node.setNode(new Node<String>("Test2"));
         assertTrue("Test2".equals(node.getNode().getElement()));
     }
+    
+    public void testLinkedList() {
+    	LinkedList<String> ll = new LinkedList<String>("jz");
+    	ll.append("az");
+    	ll.append("bz");
+    	ll.prepend("cc");
+    	String head = ll.head();
+    	assertEquals("cc", head);
+    	String s = ll.remove();
+    	assertEquals("cc", s);
+    }
+    
 }
