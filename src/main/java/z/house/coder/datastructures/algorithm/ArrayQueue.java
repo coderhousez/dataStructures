@@ -1,6 +1,8 @@
 package z.house.coder.datastructures.algorithm;
 
 import z.house.coder.datastructures.Queue;
+import z.house.coder.datastructures.exceptions.Empty;
+import z.house.coder.datastructures.exceptions.Full;
 
 /**
  * Simple array based Queue
@@ -22,28 +24,32 @@ public class ArrayQueue<T> implements Queue<T> {
 	}
 	
 	@Override
-	public void enqueue(T item) {
-		head = next(head+count);
-		queue[head] = item;
-		count++;
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public T dequeue() {
-		if(count > 0) {
-			Object o = head();
-			head = next(head);
-			count--;
-			return (T) o;
+	public void enqueue(T item) throws Full {
+		if(count == queue.length) {
+			throw new Full("Exceeding queue size of " + queue.length);
+		} else {
+			head = next(head+count);
+			queue[head] = item;
+			count++;
 		}
-		return null;
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public T head() {
-		return count == 0 ? null : (T) queue[head];
+	public T dequeue() throws Empty {
+		Object o = head();
+		head = next(head);
+		count--;
+		return (T) o;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public T head() throws Empty {
+		if(count == 0) {
+			throw new Empty();
+		}
+		return (T) queue[head];
 	}
 
 	@Override

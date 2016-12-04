@@ -1,5 +1,8 @@
 package z.house.coder.datastructures;
 
+import z.house.coder.datastructures.exceptions.Empty;
+import z.house.coder.datastructures.exceptions.Full;
+
 public interface Queue<T> {
 	
 	/**
@@ -7,23 +10,21 @@ public interface Queue<T> {
 	 * 
 	 * @param item
 	 */
-	public void enqueue(T item);
+	public void enqueue(T item) throws Full;
 	
 	/**
 	 * Removes item from Queue
 	 * 
-	 * If Queue is empty, null.
 	 * @return T
 	 */
-	public T dequeue();
+	public T dequeue() throws Empty;
 	
 	/**
 	 * Next element to dequeue is returned without removing it.
 	 * 
-	 * If queue is empty, null.
 	 * @return T
 	 */
-	public T head();
+	public T head() throws Empty;
 	
 	/**
 	 * Count of items in the Queue

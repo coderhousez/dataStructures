@@ -1,6 +1,8 @@
 package z.house.coder.datastructures.algorithm;
 
 import z.house.coder.datastructures.Stack;
+import z.house.coder.datastructures.exceptions.Empty;
+import z.house.coder.datastructures.exceptions.Full;
 
 /**
  * Simple array based Stack
@@ -21,13 +23,19 @@ public class ArrayStack<T> implements Stack<T> {
 	}
 
 	@Override
-	public void push(T item) {		
+	public void push(T item) throws Full {
+		if(stack.length == count()) {
+			throw new Full("Stack only allows " + stack.length + " elements");
+		}
 		stack[++index] = item;
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public T pop() {
+	public T pop() throws Empty {
+		if(count() == 0) {
+			throw new Empty();
+		}
 		return (T) stack[index--];
 	}
 

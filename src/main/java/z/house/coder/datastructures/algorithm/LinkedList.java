@@ -1,6 +1,8 @@
 package z.house.coder.datastructures.algorithm;
 
+import z.house.coder.datastructures.Deque;
 import z.house.coder.datastructures.data.Node;
+import z.house.coder.datastructures.exceptions.Empty;
 
 /**
  * Linked List
@@ -9,71 +11,100 @@ import z.house.coder.datastructures.data.Node;
  *
  * @param <T>
  */
-public class LinkedList<T> {
+public class LinkedList<T> implements Deque<T> {
 	
 	Node<T> node;
 	int count = 0;
 	
-	enum Position {
-		BEGIN, END
-	}
-	
 	public LinkedList(T element) {
 		node = new Node<T>(element);
+		count = 1;
 	}
 	
-	public LinkedList(Node<T> node) {
-		this.node = node;
+	@Override
+	public void insertFirst(T element) {
+		if(count == 0) {
+			node = new Node<T>(element);
+		} else {
+			Node<T> newRoot = new Node<>(element);
+			newRoot.setNode(node);
+			node = newRoot;
+		}
+		count++;		
 	}
 	
-	public void prepend(T item) {
-		Node<T> newRoot = new Node<>(item);
-		newRoot.setNode(node);
-		node = newRoot;
+	@Override
+	public void insertLast(T item) {
+		if(count == 0) {
+			insertFirst(item);
+		} else {
+			Node<T> lastNode = getNodeAt(count, 1, node);
+			lastNode.setNode(new Node<T>(item));
+		}
 		count++;
 	}
 	
-	public void append(T item) {
-		Node<T> lastNode = getLastNode(node);
-		lastNode.setNode(new Node<T>(item));
-		count++;
-	}
-	
-	private Node<T> getLastNode(Node<T> node) {
-		if(node.getNode() != null) {
-			return getLastNode(node.getNode());
+	/**
+	 * Returns node based in position in the List
+	 * 
+	 * List begins at 1
+	 * 
+	 * @param node
+	 * @return
+	 */
+	private Node<T> getNodeAt(int position, int currentPosition, Node<T> firstNode) {
+		if(currentPosition < position && count > 1) {
+			return getNodeAt(position, position+1, firstNode.getNode());
 		}
 		return node;
 	}
 	
-	public void insert(int position) {
-		
-	}
-	
-	public T remove() {
-		return removeAt(Position.BEGIN);
-	}
-	
-	private T removeAt(Position p) {
-		if(Position.BEGIN.equals(p) && count > 0) {
-			T element = node.getElement();
-			node = node.getNode();
-			return element;
+	public T removeFirst() throws Empty {
+		if(isEmpty()) {
+			throw new Empty();
 		}
-		return null;
+		T element = node.getElement();
+		node = node.getNode();
+		count--;
+		return element;
 	}
 	
-	/**
-	 * Value of first element in list.
-	 * 
-	 * @return T
-	 */
-	public T head() {
+	public T removeLast() throws Empty {
+		if(isEmpty()) {
+			throw new Empty();
+		}
+		Node<T> n = getNodeAt(count - 1, 1, node);
+		Node<T> last = n.getNode();
+		n.setNode(null);
+		count--;
+		return last.getElement();
+	}
+
+	@Override
+	public T first() throws Empty {
+		if(isEmpty()) {
+			throw new Empty();
+		}
 		return node.getElement();
 	}
-	
-	public int count() {
+
+	@Override
+	public T last() throws Empty {
+		if(isEmpty()) {
+			throw new Empty();
+		}
+		return getNodeAt(count, 1, node).getElement();
+	}
+
+	@Override
+	public int size() {
 		return count;
 	}
+
+	@Override
+	public boolean isEmpty() {
+		return count == 0;
+	}
+
 
 }

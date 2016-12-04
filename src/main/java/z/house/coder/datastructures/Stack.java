@@ -1,5 +1,8 @@
 package z.house.coder.datastructures;
 
+import z.house.coder.datastructures.exceptions.Empty;
+import z.house.coder.datastructures.exceptions.Full;
+
 public interface Stack<T> {
 	
 	/**
@@ -7,13 +10,13 @@ public interface Stack<T> {
 	 * 
 	 * @param item
 	 */
-	public void push(T item);
+	public void push(T item) throws Full;
 	
 	/**
 	 * Removes item from top of the Stack.
 	 * @return
 	 */
-	public T pop();
+	public T pop() throws Empty;
 	
 	/**
 	 * Returns count of items in the Stack.
