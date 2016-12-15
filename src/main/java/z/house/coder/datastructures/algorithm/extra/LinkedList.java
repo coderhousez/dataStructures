@@ -1,4 +1,4 @@
-package z.house.coder.datastructures.algorithm;
+package z.house.coder.datastructures.algorithm.extra;
 
 import z.house.coder.datastructures.Deque;
 import z.house.coder.datastructures.data.Node;
@@ -40,8 +40,8 @@ public class LinkedList<T> implements Deque<T> {
 		} else {
 			Node<T> lastNode = getNodeAt(count, 1, node);
 			lastNode.setNode(new Node<T>(item));
+			count++;
 		}
-		count++;
 	}
 	
 	/**
@@ -54,9 +54,9 @@ public class LinkedList<T> implements Deque<T> {
 	 */
 	private Node<T> getNodeAt(int position, int currentPosition, Node<T> firstNode) {
 		if(currentPosition < position && count > 1) {
-			return getNodeAt(position, position+1, firstNode.getNode());
+			return getNodeAt(position, currentPosition+1, firstNode.getNode());
 		}
-		return node;
+		return firstNode;
 	}
 	
 	public T removeFirst() throws Empty {

@@ -12,7 +12,8 @@ import z.house.coder.datastructures.exceptions.Full;
 public class ArrayQueue<T> implements Queue<T> {
 	
 	Object [] queue;
-	int head = -1;
+	int head =  0;
+	int tail = 0;
 	int count = 0;
 
 	public ArrayQueue() {
@@ -28,8 +29,10 @@ public class ArrayQueue<T> implements Queue<T> {
 		if(count == queue.length) {
 			throw new Full("Exceeding queue size of " + queue.length);
 		} else {
-			head = next(head+count);
-			queue[head] = item;
+			if(count > 0) {
+				tail = next(tail);
+			}
+			queue[tail] = item;
 			count++;
 		}
 	}
@@ -37,8 +40,16 @@ public class ArrayQueue<T> implements Queue<T> {
 	@SuppressWarnings("unchecked")
 	@Override
 	public T dequeue() throws Empty {
+		if(count == 0) {
+			throw new Empty();
+		}
 		Object o = head();
-		head = next(head);
+		if(head == tail) {
+			head = 0;
+			tail = 0;
+		} else {
+			head = next(head);
+		}
 		count--;
 		return (T) o;
 	}

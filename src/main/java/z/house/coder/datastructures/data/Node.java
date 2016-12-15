@@ -13,7 +13,8 @@ public class Node<T>
 	public Node(T element) {
 		this.element = element;
 		node = null;
-	};
+	}
+	
 	public Node(T element, Node<T> node) {
 		this.element = element;
 		this.node = node;
