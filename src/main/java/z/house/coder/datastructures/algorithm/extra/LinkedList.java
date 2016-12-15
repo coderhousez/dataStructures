@@ -38,7 +38,7 @@ public class LinkedList<T> implements Deque<T> {
 		if(count == 0) {
 			insertFirst(item);
 		} else {
-			Node<T> lastNode = getNodeAt(count, 1, node);
+			Node<T> lastNode = getNodeAt(count);
 			lastNode.setNode(new Node<T>(item));
 			count++;
 		}
@@ -48,15 +48,24 @@ public class LinkedList<T> implements Deque<T> {
 	 * Returns node based in position in the List
 	 * 
 	 * List begins at 1
+	 * desiredPosition >= 1
+	 * desiredPosition <= count
+	 * Ignores desiredPositions that are out of range.
 	 * 
-	 * @param node
-	 * @return
+	 * @param desiredPosition
+	 * @return Node<T>
 	 */
-	private Node<T> getNodeAt(int position, int currentPosition, Node<T> firstNode) {
-		if(currentPosition < position && count > 1) {
-			return getNodeAt(position, currentPosition+1, firstNode.getNode());
+	private Node<T> getNodeAt(int desiredPosition) {
+		Node<T> currentNode = node;
+		int currentPosition = 1;
+		while(node != null && desiredPosition >= 1 && desiredPosition <= count) {
+			if(desiredPosition == currentPosition) {
+				break;
+			}
+			currentNode = currentNode.getNode();
+			currentPosition++;
 		}
-		return firstNode;
+		return currentNode;
 	}
 	
 	public T removeFirst() throws Empty {
@@ -73,7 +82,7 @@ public class LinkedList<T> implements Deque<T> {
 		if(isEmpty()) {
 			throw new Empty();
 		}
-		Node<T> n = getNodeAt(count - 1, 1, node);
+		Node<T> n = getNodeAt(count - 1);
 		Node<T> last = n.getNode();
 		n.setNode(null);
 		count--;
@@ -93,7 +102,7 @@ public class LinkedList<T> implements Deque<T> {
 		if(isEmpty()) {
 			throw new Empty();
 		}
-		return getNodeAt(count, 1, node).getElement();
+		return getNodeAt(count).getElement();
 	}
 
 	@Override
