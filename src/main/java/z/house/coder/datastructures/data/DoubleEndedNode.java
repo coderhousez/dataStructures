@@ -3,17 +3,13 @@ package z.house.coder.datastructures.data;
 public class DoubleEndedNode<T> {
 
 	T element;
-	Node<T> headNode;
-	Node<T> tailNode;
+	DoubleEndedNode<T> prev;
+	DoubleEndedNode<T> next;
 	
-	public DoubleEndedNode(T element) {
+	public DoubleEndedNode(T element, DoubleEndedNode<T> headNode, DoubleEndedNode<T>tailNode ) {
 		this.element = element;
-	}
-	
-	public DoubleEndedNode(T element, Node<T> headNode, Node<T>tailNode ) {
-		this.element = element;
-		this.headNode = headNode;
-		this.tailNode = tailNode;
+		this.prev = headNode;
+		this.prev = tailNode;
 	}
 	
 	public T getElement() {
@@ -24,21 +20,22 @@ public class DoubleEndedNode<T> {
 		this.element = element;
 	}
 
-	public Node<T> getHeadNode() {
-		return headNode;
+	public DoubleEndedNode<T> getPrev() {
+		return prev;
 	}
 
-	public void setHeadNode(Node<T> headNode) {
-		this.headNode = headNode;
+	public void setPrev(DoubleEndedNode<T> prev) {
+		this.prev = prev;
 	}
 
-	public Node<T> getTailNode() {
-		return tailNode;
+	public DoubleEndedNode<T> getNext() {
+		return next;
 	}
 
-	public void setTailNode(Node<T> tailNode) {
-		this.tailNode = tailNode;
+	public void setNext(DoubleEndedNode<T> next) {
+		this.next = next;
 	}
+
 	
 	
 }

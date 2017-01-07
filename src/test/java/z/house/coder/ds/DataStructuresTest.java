@@ -147,4 +147,8 @@ public class DataStructuresTest
     	
     }
     
+    public void testDoublyLinkedList() throws Full, Empty {
+    	
+    }
+    
 }
