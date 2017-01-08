@@ -6,6 +6,7 @@ import z.house.coder.datastructures.algorithm.ArrayQueue;
 import z.house.coder.datastructures.algorithm.ArrayStack;
 import z.house.coder.datastructures.algorithm.LinkedQueue;
 import z.house.coder.datastructures.algorithm.LinkedStack;
+import z.house.coder.datastructures.algorithm.extra.DoublyLinkedList;
 import z.house.coder.datastructures.algorithm.extra.LinkedList;
 import z.house.coder.datastructures.data.Node;
 import z.house.coder.datastructures.exceptions.Empty;
@@ -148,7 +149,11 @@ public class DataStructuresTest
     }
     
     public void testDoublyLinkedList() throws Full, Empty {
-    	
+    	DoublyLinkedList<String> dll = new DoublyLinkedList<>();
+    	dll.insertFirst("a");
+    	dll.insertFirst("b");
+    	assertEquals("a", dll.last());
+    	assertEquals("b", dll.first());
     }
     
 }

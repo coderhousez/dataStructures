@@ -1,22 +1,32 @@
 package z.house.coder.datastructures.data;
 
+import java.util.Optional;
+
 public class DoubleEndedNode<T> {
 
-	T element;
+	Optional<T> element;
 	DoubleEndedNode<T> prev;
 	DoubleEndedNode<T> next;
 	
-	public DoubleEndedNode(T element, DoubleEndedNode<T> headNode, DoubleEndedNode<T>tailNode ) {
-		this.element = element;
-		this.prev = headNode;
-		this.prev = tailNode;
+	public DoubleEndedNode() {
+		element = Optional.empty();
+		prev = null;
+		next = null;
 	}
 	
-	public T getElement() {
+	public DoubleEndedNode(Optional<T> element, 
+			DoubleEndedNode<T> prev, 
+			DoubleEndedNode<T> next ) {
+		this.element = element;
+		this.prev = prev;
+		this.prev = next;
+	}
+	
+	public Optional<T> getElement() {
 		return element;
 	}
 
-	public void setElement(T element) {
+	public void setElement(Optional<T> element) {
 		this.element = element;
 	}
 

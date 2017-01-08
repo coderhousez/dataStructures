@@ -1,5 +1,7 @@
 package z.house.coder.datastructures.algorithm.extra;
 
+import java.util.Optional;
+
 import z.house.coder.datastructures.Deque;
 import z.house.coder.datastructures.data.DoubleEndedNode;
 import z.house.coder.datastructures.exceptions.Empty;
@@ -7,38 +9,34 @@ import z.house.coder.datastructures.exceptions.Full;
 
 public class DoublyLinkedList<T> implements Deque<T> {
 	
-	DoubleEndedNode<T> header;
-	DoubleEndedNode<T> trailer;
+	DoubleEndedNode<T> head;
+	DoubleEndedNode<T> tail;
 	int count = 0;
 	
-	DoublyLinkedList(){
-		header = new DoubleEndedNode<T>(null, header, header);
-		trailer = header;
+	public DoublyLinkedList(){
+		head = new DoubleEndedNode<T>();
+		tail = new DoubleEndedNode<T>();
+		head.setNext(tail);
+		tail.setPrev(head);
 	}
 
 	@Override
 	public void insertFirst(T element) throws Full {
-		if(count == 0) {
-			header.setElement(element);
-			count++;
-		} else {
-			DoubleEndedNode<> newNode = new DoubleEndedNode<T>(element, newNode, header);
-			header.setPrev(newNode);
-			header = newNode;
-			trailer = header;
-			count++;
+		DoubleEndedNode<T> newNode = new DoubleEndedNode<T>();
+		if(element != null) {
+			newNode.setElement(Optional.of(element));
 		}
-		
+		DoubleEndedNode<T> oldNext = head.getNext();
+		head.setNext(newNode);
+		newNode.setPrev(head);
+		newNode.setNext(oldNext);
+		oldNext.setPrev(newNode);
+		count++;
 	}
 
 	@Override
 	public void insertLast(T element) throws Full {
-		if(count == 0) {
-			header.setElement(element);
-			count++;
-		} else {
-			DoubleEndedNode<> newNode = new DoubleEndedNode<T>(element, trailer)
-		}
+
 		
 	}
 
@@ -56,14 +54,18 @@ public class DoublyLinkedList<T> implements Deque<T> {
 
 	@Override
 	public T first() throws Empty {
-		// TODO Auto-generated method stub
-		return null;
+		if(count == 0) {
+			throw new Empty();
+		}
+		return head.getNext().getElement().orElse(null);
 	}
 
 	@Override
 	public T last() throws Empty {
-		// TODO Auto-generated method stub
-		return null;
+		if(count == 0) {
+			throw new Empty();
+		}
+		return tail.getPrev().getElement().orElse(null);
 	}
 
 	@Override
