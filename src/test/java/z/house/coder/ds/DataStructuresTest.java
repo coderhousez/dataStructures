@@ -154,6 +154,16 @@ public class DataStructuresTest
     	dll.insertFirst("b");
     	assertEquals("a", dll.last());
     	assertEquals("b", dll.first());
+    	dll.insertLast("y");
+    	dll.insertLast("z");
+    	assertEquals("z", dll.last());
+    	// b , a , y , z
+    	assertEquals(4, dll.size());
+    	assertEquals("b", dll.removeFirst());
+    	assertEquals("z", dll.removeLast());
+    	assertEquals("a", dll.removeFirst());
+    	assertEquals("y", dll.removeLast());
+    	assertEquals(0, dll.size());
     }
     
 }
