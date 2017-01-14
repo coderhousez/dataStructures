@@ -1,16 +1,19 @@
 package z.house.coder.ds;
 
 import z.house.coder.datastructures.Queue;
+import z.house.coder.datastructures.RankedSequence;
 import z.house.coder.datastructures.Stack;
 import z.house.coder.datastructures.algorithm.ArrayQueue;
 import z.house.coder.datastructures.algorithm.ArrayStack;
 import z.house.coder.datastructures.algorithm.LinkedQueue;
 import z.house.coder.datastructures.algorithm.LinkedStack;
+import z.house.coder.datastructures.algorithm.NodeRankedSequence;
 import z.house.coder.datastructures.algorithm.extra.DoublyLinkedList;
 import z.house.coder.datastructures.algorithm.extra.LinkedList;
 import z.house.coder.datastructures.data.Node;
 import z.house.coder.datastructures.exceptions.Empty;
 import z.house.coder.datastructures.exceptions.Full;
+import z.house.coder.datastructures.exceptions.InvalidRankException;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
@@ -148,7 +151,7 @@ public class DataStructuresTest
     	
     }
     
-    public void testDoublyLinkedList() throws Full, Empty {
+    public void testDoublyLinkedList() throws Full, Empty, InvalidRankException {
     	DoublyLinkedList<String> dll = new DoublyLinkedList<>();
     	dll.insertFirst("a");
     	dll.insertFirst("b");
@@ -158,12 +161,32 @@ public class DataStructuresTest
     	dll.insertLast("z");
     	assertEquals("z", dll.last());
     	// b , a , y , z
+    	// remove elements
     	assertEquals(4, dll.size());
     	assertEquals("b", dll.removeFirst());
     	assertEquals("z", dll.removeLast());
     	assertEquals("a", dll.removeFirst());
     	assertEquals("y", dll.removeLast());
     	assertEquals(0, dll.size());
+    }
+    
+    public void testRankedSequence() throws Full, InvalidRankException {
+    	NodeRankedSequence<String> rankedSequence = new NodeRankedSequence<>();
+    	rankedSequence.insertFirst("A");
+    	rankedSequence.insertLast("Z");
+    	rankedSequence.insertElementAtRank(1, "M");
+    	// A, M, Z
+    	String removed = rankedSequence.removeElementAtRank(2);
+    	assertEquals("Z", removed);
+    	String s = rankedSequence.elementAtRank(1);
+    	assertEquals("M", s);
+    	rankedSequence.insertLast("Z");
+    	rankedSequence.replaceElementAtRank(1, "N");
+    	// A, N, Z
+    	assertEquals("A", rankedSequence.elementAtRank(0));
+    	assertEquals("N", rankedSequence.elementAtRank(1));
+    	assertEquals("Z", rankedSequence.elementAtRank(2));
+    	
     }
     
 }

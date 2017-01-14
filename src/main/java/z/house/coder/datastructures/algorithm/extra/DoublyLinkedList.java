@@ -3,6 +3,7 @@ package z.house.coder.datastructures.algorithm.extra;
 import java.util.Optional;
 
 import z.house.coder.datastructures.Deque;
+import z.house.coder.datastructures.RankedSequence;
 import z.house.coder.datastructures.data.DoubleEndedNode;
 import z.house.coder.datastructures.exceptions.Empty;
 import z.house.coder.datastructures.exceptions.Full;
@@ -16,11 +17,11 @@ import z.house.coder.datastructures.exceptions.InvalidRankException;
  * @param <T>
  */
 
-public class DoublyLinkedList<T> implements Deque<T> {
+public class DoublyLinkedList<T> implements Deque<T> , RankedSequence<T> {
 	
 	DoubleEndedNode<T> head;
 	DoubleEndedNode<T> tail;
-	int count = 0;
+	Integer counter =new Integer(0);;
 	
 	public DoublyLinkedList(){
 		head = new DoubleEndedNode<T>();
@@ -40,7 +41,7 @@ public class DoublyLinkedList<T> implements Deque<T> {
 		newNode.setPrev(head);
 		newNode.setNext(oldNext);
 		oldNext.setPrev(newNode);
-		count++;
+		counter = Integer.valueOf(size() + 1);
 	}
 
 	@Override
@@ -54,12 +55,12 @@ public class DoublyLinkedList<T> implements Deque<T> {
 		newNode.setNext(tail);
 		newNode.setPrev(oldPrev);
 		oldPrev.setNext(newNode);
-		count++;
+		counter = Integer.valueOf(size() + 1);
 	}
 
 	@Override
 	public T removeFirst() throws Empty {
-		if(count == 0) {
+		if(counter.intValue() == 0) {
 			throw new Empty();
 		}
 		DoubleEndedNode<T> oldNext = head.getNext();
@@ -70,13 +71,13 @@ public class DoublyLinkedList<T> implements Deque<T> {
 		oldNext.setPrev(null);
 		oldNext.setNext(null);
 		oldNext.setElement(Optional.empty());
-		count--;
+		counter = Integer.valueOf(size() - 1);
 		return oldNextElement.orElse(null);
 	}
 
 	@Override
 	public T removeLast() throws Empty {
-		if(count == 0) {
+		if(counter.intValue() == 0) {
 			throw new Empty();
 		}
 		DoubleEndedNode<T> oldPrev = tail.getPrev();
@@ -87,41 +88,46 @@ public class DoublyLinkedList<T> implements Deque<T> {
 		oldPrev.setPrev(null);
 		oldPrev.setNext(null);
 		oldPrev.setElement(Optional.empty());
-		count--;
+		counter = Integer.valueOf(size() - 1);
 		return oldPrevElement.orElse(null);
 	}
 	
 	/**
 	 * desiredPosition is zero based
+	 * non-destructive
 	 * 
 	 * @param desiredPosition
 	 * @return
 	 * @throws InvalidRankException
 	 */
-	public DoubleEndedNode<T> getNodeAt(int desiredPosition) 
+	private DoubleEndedNode<T> getNodeAt(int desiredPosition) 
 		throws InvalidRankException , Empty {
-		if(desiredPosition < 0 || desiredPosition > count - 1) {
+		if(desiredPosition < 0 || desiredPosition > size() - 1) {
 			throw new InvalidRankException();
 		}
 		if(isEmpty()) {
 			throw new Empty();
 		}
 		DoubleEndedNode<T> node = null;
-		if(desiredPosition < count/2) {
+		if(desiredPosition <= size()/2) {
 			DoubleEndedNode<T> currentNode = head;
-			for(int i=0; i < count; count++) {
+			for(int i=0; i < size(); i++) {
 				if(i == desiredPosition) {
-					node = currentNode;
+					node = currentNode.getNext();
+					break;
+				} else {
+					currentNode = currentNode.getNext();
 				}
-				currentNode = currentNode.getNext();
 			}		
 		} else {
 			DoubleEndedNode<T> currentNode = tail;
-			for(int i=count; i > 0; i--) {
+			for(int i=size()-1; i >= 0; i--) {
 				if(i == desiredPosition){
-					node = currentNode;
+					node = currentNode.getPrev();
+					break;
+				} else {
+					currentNode = currentNode.getPrev();
 				}
-				currentNode = currentNode.getPrev();
 			}
 		}
 		return node;
@@ -129,7 +135,7 @@ public class DoublyLinkedList<T> implements Deque<T> {
 
 	@Override
 	public T first() throws Empty {
-		if(count == 0) {
+		if(size() == 0) {
 			throw new Empty();
 		}
 		return head.getNext().getElement().orElse(null);
@@ -137,7 +143,7 @@ public class DoublyLinkedList<T> implements Deque<T> {
 
 	@Override
 	public T last() throws Empty {
-		if(count == 0) {
+		if(size() == 0) {
 			throw new Empty();
 		}
 		return tail.getPrev().getElement().orElse(null);
@@ -145,12 +151,80 @@ public class DoublyLinkedList<T> implements Deque<T> {
 
 	@Override
 	public int size() {
-		return count;
+		return counter.intValue();
 	}
 
 	@Override
 	public boolean isEmpty() {
-		return count == 0;
+		return counter.intValue() == 0;
+	}
+
+	@Override
+	public T elementAtRank(int rank) throws InvalidRankException {
+		T element = null;
+		try {
+			element = getNodeAt(rank).getElement().get();
+		} catch(Empty e) {
+			throw new InvalidRankException();
+		}
+		return element;
+	}
+
+	@Override
+	public T replaceElementAtRank(int rank, T element)
+			throws InvalidRankException {
+		Optional<T> oldElement = Optional.empty();
+		try {
+			DoubleEndedNode<T> node = getNodeAt(rank);
+			oldElement = node.getElement();
+			node.setElement(Optional.of(element));
+		} catch(Empty e) {
+			throw new InvalidRankException(e.getMessage());
+		}
+		return oldElement.get();
+	}
+
+	@Override
+	public void insertElementAtRank(int rank, T element)
+			throws InvalidRankException {
+		DoubleEndedNode<T> newNode = new DoubleEndedNode<>();
+		newNode.setElement(Optional.of(element));
+		try {
+			// preserve rank node
+			DoubleEndedNode<T> rankedNode = getNodeAt(rank);
+			DoubleEndedNode<T> previousNode = rankedNode.getPrev();
+			// update DoublyLinkedList
+			newNode.setPrev(previousNode);
+			newNode.setNext(rankedNode);
+			rankedNode.setPrev(newNode);
+			previousNode.setNext(newNode);
+		} catch(Empty e) {
+			throw new InvalidRankException();
+		}
+		counter = Integer.valueOf(size() + 1);
+	}
+
+	@Override
+	public T removeElementAtRank(int rank) throws InvalidRankException {
+		Optional<T> element = Optional.empty();
+		try {
+			// preserve
+			DoubleEndedNode<T> rankedNode = getNodeAt(rank);
+			DoubleEndedNode<T> prevNode = rankedNode.getPrev();
+			DoubleEndedNode<T> nextNode = rankedNode.getNext();
+			element = rankedNode.getElement();
+			// update
+			prevNode.setNext(nextNode);
+			nextNode.setPrev(prevNode);
+			rankedNode.setPrev(null);
+			rankedNode.setNext(null);
+			rankedNode.setElement(Optional.empty());
+		} catch(Empty e) {
+			throw new InvalidRankException();
+		}
+		counter = Integer.valueOf(size() - 1);
+		
+		return element.get();
 	}
 
 }
