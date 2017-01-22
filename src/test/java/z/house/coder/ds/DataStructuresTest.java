@@ -1,5 +1,7 @@
 package z.house.coder.ds;
 
+import z.house.coder.datastructures.Position;
+import z.house.coder.datastructures.PositionalSequence;
 import z.house.coder.datastructures.Queue;
 import z.house.coder.datastructures.RankedSequence;
 import z.house.coder.datastructures.Stack;
@@ -7,12 +9,14 @@ import z.house.coder.datastructures.algorithm.ArrayQueue;
 import z.house.coder.datastructures.algorithm.ArrayStack;
 import z.house.coder.datastructures.algorithm.LinkedQueue;
 import z.house.coder.datastructures.algorithm.LinkedStack;
+import z.house.coder.datastructures.algorithm.NodePositionalSequence;
 import z.house.coder.datastructures.algorithm.NodeRankedSequence;
 import z.house.coder.datastructures.algorithm.extra.DoublyLinkedList;
 import z.house.coder.datastructures.algorithm.extra.LinkedList;
 import z.house.coder.datastructures.data.Node;
 import z.house.coder.datastructures.exceptions.Empty;
 import z.house.coder.datastructures.exceptions.Full;
+import z.house.coder.datastructures.exceptions.InvalidPositionException;
 import z.house.coder.datastructures.exceptions.InvalidRankException;
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -187,6 +191,14 @@ public class DataStructuresTest
     	assertEquals("N", rankedSequence.elementAtRank(1));
     	assertEquals("Z", rankedSequence.elementAtRank(2));
     	
+    }
+    
+    public void testNodePositionalSequence() throws InvalidPositionException {
+    	NodePositionalSequence<String> nps = new NodePositionalSequence<>();
+    	nps.insertFirst("jz");
+    	nps.insertLast("zz");
+    	Position<String, PositionalSequence<String>> p = nps.first();
+    	assertEquals("jz", p.getElement().get());
     }
     
 }
