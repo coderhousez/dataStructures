@@ -197,8 +197,12 @@ public class DataStructuresTest
     	NodePositionalSequence<String> nps = new NodePositionalSequence<>();
     	nps.insertFirst("jz");
     	nps.insertLast("zz");
-    	Position<String, PositionalSequence<String>> p = nps.first();
-    	assertEquals("jz", p.getElement().get());
+    	Position<String, PositionalSequence<String>> position = nps.first();
+    	assertEquals("jz", position.getElement().get());
+    	PositionalSequence<String> container = position.getContainer();
+    	assertTrue(nps == container); // same reference
+    	nps.insertAfter(position, "AA");
+    	assertTrue(nps.count() == 3);
     }
     
 }

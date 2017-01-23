@@ -72,34 +72,50 @@ public class NodePositionalSequence<T> implements PositionalSequence<T> {
 
 	@Override
 	public void insertFirst(T element) {
-		PositionalDoubleEndedNode<T> newNode = new PositionalDoubleEndedNode<>(this);
-		newNode.setElement(Optional.of(element));
-		// TODO: fix API for PositionalDoubleEndedNode getNext()
-		DoubleEndedNode<T> nextNode = head.getNext();
-		head.setNext(newNode);
-		nextNode.setPrev(newNode);
-		newNode.setPrev(head);
-		newNode.setNext(nextNode);
-		count++;
+		try {
+			insertAfter(head, element);
+		} catch(Exception e) {
+			throw new RuntimeException();
+		}
 	}
 
 	@Override
 	public void insertLast(T element) {
-		// TODO Auto-generated method stub
+		try {
+			insertBefore(tail,element);
+		} catch(Exception e) {
+			throw new RuntimeException();
+		}
 		
 	}
 
 	@Override
 	public void insertBefore(Position<T, PositionalSequence<T>> p, T element)
 			throws InvalidPositionException {
-		// TODO Auto-generated method stub
-		
+		PositionalDoubleEndedNode<T> currentNode = (PositionalDoubleEndedNode<T>) p;
+		PositionalDoubleEndedNode<T> newNode = new PositionalDoubleEndedNode<>(this);
+		newNode.setElement(Optional.of(element));
+		DoubleEndedNode<T> prevNode = currentNode.getPrev();
+		currentNode.setPrev(newNode);
+		prevNode.setNext(newNode);
+		newNode.setPrev(prevNode);
+		newNode.setNext(currentNode);
+		count++;
 	}
 
 	@Override
 	public void insertAfter(Position<T, PositionalSequence<T>> p, T element)
 			throws InvalidPositionException {
-		// TODO Auto-generated method stub
+		PositionalDoubleEndedNode<T> currentNode = (PositionalDoubleEndedNode<T>) p;
+		PositionalDoubleEndedNode<T> newNode = new PositionalDoubleEndedNode<>(this);
+		newNode.setElement(Optional.of(element));
+		// TODO: fix API for PositionalDoubleEndedNode getNext()
+		DoubleEndedNode<T> nextNode = currentNode.getNext();
+		currentNode.setNext(newNode);
+		nextNode.setPrev(newNode);
+		newNode.setPrev(currentNode);
+		newNode.setNext(nextNode);
+		count++;
 		
 	}
 
@@ -108,6 +124,10 @@ public class NodePositionalSequence<T> implements PositionalSequence<T> {
 			throws InvalidPositionException {
 		// TODO Auto-generated method stub
 		
+	}
+	
+	public int count() {
+		return this.count.intValue();
 	}
 
 }
